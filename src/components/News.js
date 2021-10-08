@@ -268,7 +268,7 @@ export default class News extends Component {
     constructor(){
         super();
         this.state={ // State is used when data is changes dynamically
-            articles: this.articles,
+            articles1: this.articles,
             loading: false
         }
     }
@@ -278,15 +278,11 @@ export default class News extends Component {
             <div className="container my-3">
                 <h2>Top Headlines</h2>
                 <div className="row">
-                    <div className="col-md-4">
-                        <NewsItem title="Kunal" description="hello" imageUrl="https://www.washingtonpost.com/wp-apps/imrs.php?src=https://arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/QPGYYHTAOUI6XILXO5S7FGUVEQ.jpg&w=1440" newsUrl="todo"/>
-                    </div>
-                    <div className="col-md-4">
-                        <NewsItem title="Kunal" description="hello" />
-                    </div>
-                    <div className="col-md-4">
-                        <NewsItem title="Kunal" description="hello" />
-                    </div>
+                {this.state.articles1.map((element) => {
+                  return   <div className="col-md-4 my-3" key={element.url}/* Each element must return a unique key. Here url is the unique key*/>
+                  <NewsItem title={element.title} description={element.description} imageUrl={element.urlToImage} newsUrl={element.url}/>
+              </div>
+                })}
                 </div>
             </div>
         )
