@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import NewsItem from './NewsItem'
+import Spinner from './Spinner';
 
 export default class News extends Component {
   constructor() { // This runs before render
@@ -12,41 +13,48 @@ export default class News extends Component {
   }
 
   async componentDidMount() { // This runs after render
-    let url = "https://newsapi.org/v2/top-headlines?country=in&apiKey=3e181924374b4955b4018130d947707b&page=1&pageSize=15";
+    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=3e181924374b4955b4018130d947707b&page=1&pageSize=${this.props.pageSize}`;
+    this.setState({ loading: true });
     let data = await fetch(url); // Using async-await because it return a promise
     let parsedData = await data.json();
-    this.setState({ articles1: parsedData.articles, totalResults: parsedData.totalResults });
+    this.setState({
+      articles1: parsedData.articles,
+      totalResults: parsedData.totalResults,
+      loading: false
+    });
   }
 
   handlePrevClick = async () => {
-    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=3e181924374b4955b4018130d947707b&page=${this.state.page - 1}&pageSize=15`;
+    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=3e181924374b4955b4018130d947707b&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`;
+    this.setState({ loading: true });
     let data = await fetch(url);
     let parsedData = await data.json();
     this.setState({
       articles1: parsedData.articles,
-      page: this.state.page - 1 // After fetching data, set state
+      page: this.state.page - 1, // After fetching data, set state
+      loading: false
     });
   }
 
   handleNextClick = async () => {
-    if (this.state.page + 1 > Math.ceil(this.state.totalResults/15)) {} // Math.ceil gives smallest integer greater than decimal number
-    else {
-      let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=3e181924374b4955b4018130d947707b&page=${this.state.page + 1}&pageSize=15`;
-      let data = await fetch(url);
-      let parsedData = await data.json();
-      this.setState({
-        articles1: parsedData.articles,
-        page: this.state.page + 1 // After fetching data, set state
-      });
-    }
+    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=3e181924374b4955b4018130d947707b&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
+    this.setState({ loading: true });
+    let data = await fetch(url);
+    let parsedData = await data.json();
+    this.setState({
+      articles1: parsedData.articles,
+      page: this.state.page + 1, // After fetching data, set state
+      loading: false
+    });
   }
 
   render() {
     return (
       <div className="container my-3">
-        <h2>Top Headlines</h2>
+        <h1 className="text-center">Top Headlines</h1>
+        {this.state.loading && <Spinner />/* Spinner is only visible when statement before && is true*/}
         <div className="row">
-          {this.state.articles1.map((element) => {
+          {!this.state.loading && this.state.articles1.map((element) => {
             return <div className="col-md-4 my-3" key={element.url}/* Each element must return a unique key. Here url is the unique key*/>
               <NewsItem title={element.title ? element.title : ""} description={element.description ? element.description : ""} imageUrl={element.urlToImage} newsUrl={element.url} />
             </div>
@@ -54,7 +62,7 @@ export default class News extends Component {
         </div>
         <div className="container my-2 d-flex justify-content-between">
           <button disabled={this.state.page <= 1} type="button" onClick={this.handlePrevClick} class="btn btn-dark">&#8592; Previous</button>
-          <button type="button" onClick={this.handleNextClick} class="btn btn-dark">Next &#8594;</button>
+          <button disabled={this.state.page + 1 > Math.ceil(this.state.totalResults / this.props.pageSize)}/* Math.ceil gives smallest integer greater than decimal number */ type="button" onClick={this.handleNextClick} class="btn btn-dark">Next &#8594;</button>
         </div>
       </div>
     )
