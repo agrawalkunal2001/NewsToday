@@ -69,13 +69,13 @@ export default class News extends Component {
         <div className="row">
           {!this.state.loading && this.state.articles1.map((element) => {
             return <div className="col-md-4 my-3" key={element.url}/* Each element must return a unique key. Here url is the unique key*/>
-              <NewsItem title={element.title ? element.title : ""} description={element.description ? element.description : ""} imageUrl={element.urlToImage} newsUrl={element.url} />
+              <NewsItem title={element.title ? element.title : ""} description={element.description ? element.description : ""} imageUrl={element.urlToImage} newsUrl={element.url} author={element.author ? element.author : "Unknown"} date={element.publishedAt} source={element.source.name}/>
             </div>
           })}
         </div>
         <div className="container my-2 d-flex justify-content-between">
-          <button disabled={this.state.page <= 1} type="button" onClick={this.handlePrevClick} class="btn btn-dark">&#8592; Previous</button>
-          <button disabled={this.state.page + 1 > Math.ceil(this.state.totalResults / this.props.pageSize)}/* Math.ceil gives smallest integer greater than decimal number */ type="button" onClick={this.handleNextClick} class="btn btn-dark">Next &#8594;</button>
+          <button disabled={this.state.page <= 1} type="button" onClick={this.handlePrevClick} className="btn btn-dark">&#8592; Previous</button>
+          <button disabled={this.state.page + 1 > Math.ceil(this.state.totalResults / this.props.pageSize)}/* Math.ceil gives smallest integer greater than decimal number */ type="button" onClick={this.handleNextClick} className="btn btn-dark">Next &#8594;</button>
         </div>
       </div>
     )
