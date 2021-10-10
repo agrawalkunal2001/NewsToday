@@ -1,8 +1,21 @@
 import React, { Component } from 'react'
 import NewsItem from './NewsItem'
 import Spinner from './Spinner';
+import PropTypes from 'prop-types'
 
 export default class News extends Component {
+  static defaultProps = {
+    pageSize: 9,
+    country: "in",
+    category: "general"
+  }
+
+  static propTypes = {
+    pageSize: PropTypes.number,
+    country: PropTypes.string,
+    category: PropTypes.string,
+  }
+
   constructor() { // This runs before render
     super();
     this.state = { // State is used when data is changes dynamically
@@ -13,9 +26,9 @@ export default class News extends Component {
   }
 
   async componentDidMount() { // This runs after render
-    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=3e181924374b4955b4018130d947707b&page=1&pageSize=${this.props.pageSize}`;
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=3e181924374b4955b4018130d947707b&page=1&pageSize=${this.props.pageSize}`;
     this.setState({ loading: true });
-    let data = await fetch(url); // Using async-await because it return a promise
+    let data = await fetch(url); // Using async-await because it returns a promise and takes time to fetch data
     let parsedData = await data.json();
     this.setState({
       articles1: parsedData.articles,
@@ -25,7 +38,7 @@ export default class News extends Component {
   }
 
   handlePrevClick = async () => {
-    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=3e181924374b4955b4018130d947707b&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`;
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=3e181924374b4955b4018130d947707b&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`;
     this.setState({ loading: true });
     let data = await fetch(url);
     let parsedData = await data.json();
@@ -37,7 +50,7 @@ export default class News extends Component {
   }
 
   handleNextClick = async () => {
-    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=3e181924374b4955b4018130d947707b&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=3e181924374b4955b4018130d947707b&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
     this.setState({ loading: true });
     let data = await fetch(url);
     let parsedData = await data.json();
@@ -51,7 +64,7 @@ export default class News extends Component {
   render() {
     return (
       <div className="container my-3">
-        <h1 className="text-center">Top Headlines</h1>
+        <h1 className="text-center" style={{margin: "30px"}}>Top {this.props.category} Headlines</h1>
         {this.state.loading && <Spinner />/* Spinner is only visible when statement before && is true*/}
         <div className="row">
           {!this.state.loading && this.state.articles1.map((element) => {

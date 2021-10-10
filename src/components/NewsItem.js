@@ -6,7 +6,7 @@ export default class NewsItem extends Component {
 
         return (
             <div>
-                <div className="card" style={{width: "18rem"}}/* One bracket for js and other for an object*/>
+                <div className="card">
                     <img src={imageUrl} className="card-img-top" alt="..."/>
                     <div class ="card-body">
                     <h5 class ="card-title">{title}...</h5>
