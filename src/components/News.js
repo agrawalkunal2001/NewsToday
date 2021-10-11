@@ -25,51 +25,46 @@ export default class News extends Component {
     }
   }
 
-  async componentDidMount() { // This runs after render
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=3e181924374b4955b4018130d947707b&page=1&pageSize=${this.props.pageSize}`;
-    this.setState({ loading: true });
-    let data = await fetch(url); // Using async-await because it returns a promise and takes time to fetch data
-    let parsedData = await data.json();
-    this.setState({
-      articles1: parsedData.articles,
-      totalResults: parsedData.totalResults,
-      loading: false
-    });
-  }
-
-  handlePrevClick = async () => {
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=3e181924374b4955b4018130d947707b&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`;
+  async updateNews() {
+    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=3e181924374b4955b4018130d947707b&page=${this.state.page}&pageSize=${this.props.pageSize}`;
     this.setState({ loading: true });
     let data = await fetch(url);
     let parsedData = await data.json();
     this.setState({
       articles1: parsedData.articles,
-      page: this.state.page - 1, // After fetching data, set state
       loading: false
     });
+  }
+
+
+  async componentDidMount() { // This runs after render
+    this.updateNews();
+  }
+
+
+  handlePrevClick = async () => {
+    this.setState({
+      page: this.state.page - 1,
+    });
+    this.updateNews();
   }
 
   handleNextClick = async () => {
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=3e181924374b4955b4018130d947707b&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
-    this.setState({ loading: true });
-    let data = await fetch(url);
-    let parsedData = await data.json();
     this.setState({
-      articles1: parsedData.articles,
-      page: this.state.page + 1, // After fetching data, set state
-      loading: false
+      page: this.state.page + 1,
     });
+    this.updateNews();
   }
 
   render() {
     return (
       <div className="container my-3">
-        <h1 className="text-center" style={{margin: "30px"}}>Top {this.props.category} Headlines</h1>
+        <h1 className="text-center" style={{ margin: "30px" }}>Top {this.props.category} Headlines</h1>
         {this.state.loading && <Spinner />/* Spinner is only visible when statement before && is true*/}
         <div className="row">
           {!this.state.loading && this.state.articles1.map((element) => {
             return <div className="col-md-4 my-3" key={element.url}/* Each element must return a unique key. Here url is the unique key*/>
-              <NewsItem title={element.title ? element.title : ""} description={element.description ? element.description : ""} imageUrl={element.urlToImage} newsUrl={element.url} author={element.author ? element.author : "Unknown"} date={element.publishedAt} source={element.source.name}/>
+              <NewsItem title={element.title ? element.title : ""} description={element.description ? element.description : ""} imageUrl={element.urlToImage} newsUrl={element.url} author={element.author ? element.author : "Unknown"} date={element.publishedAt} source={element.source.name} />
             </div>
           })}
         </div>
