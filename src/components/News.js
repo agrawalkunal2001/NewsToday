@@ -16,13 +16,14 @@ export default class News extends Component {
     category: PropTypes.string,
   }
 
-  constructor() { // This runs before render
-    super();
+  constructor(props) { // This runs before render
+    super(props);
     this.state = { // State is used when data is changes dynamically
       articles1: [],
       loading: false,
       page: 1
     }
+    document.title = `News Today - ${this.props.category}`;
   }
 
   async updateNews() {
