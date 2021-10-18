@@ -29,15 +29,19 @@ export default class News extends Component {
   }
 
   async updateNews() {
+    this.props.changeProgress(0);
     const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=3e181924374b4955b4018130d947707b&page=${this.state.page}&pageSize=${this.props.pageSize}`;
     this.setState({ loading: true });
+    this.props.changeProgress(30);
     let data = await fetch(url);
     let parsedData = await data.json();
+    this.props.changeProgress(60);
     this.setState({
       articles1: parsedData.articles,
       loading: false,
       totalResults: parsedData.totalResults
     });
+    this.props.changeProgress(100);
   }
 
 
@@ -74,7 +78,7 @@ export default class News extends Component {
 
   render() {
     return (
-      <div className="container my-3">
+      <div className="container my-2">
         <h1 className="text-center" style={{ margin: "30px" }}>Top {this.props.category} Headlines</h1>
         {this.state.loading && <Spinner />/* Spinner is only visible when statement before && is true*/}
         <InfiniteScroll

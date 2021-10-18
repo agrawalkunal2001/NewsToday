@@ -4,6 +4,7 @@ import './App.css';
 import React, { Component } from 'react'
 import Navbar from './components/Navbar';
 import News from './components/News';
+import LoadingBar from 'react-top-loading-bar';
 import {
   BrowserRouter as Router,
   Switch,
@@ -11,32 +12,45 @@ import {
 } from "react-router-dom";
 
 export default class App extends Component {
+  state = {
+    progress: 0,
+  }
+
+  setProgress = (progress) => {
+    this.setState({ progress: progress });
+  }
+
   render() {
     return (
       <div>
         <Router>
           <Navbar />
+          <LoadingBar
+            height={3}
+            color='red'
+            progress={this.state.progress}
+          />
           <Switch /* Before using exact keyword, the links were not working. After using exact keyword, links were working but one had to reload the page after clicking a category, to show its news. This was because after selecting a category, it was not remounted on the previous catgeory. To resolve this, key was used.*/>
             <Route exact path="/" /* / Specifies home page which is general category*/>
-              <News key="general" pageSize={9} country="in" category="General" />
+              <News changeProgress={this.setProgress}  key="general" pageSize={9} country="in" category="General" />
             </Route>
             <Route exact path="/business">
-              <News key="business" pageSize={9} country="in" category="Business" />
+              <News changeProgress={this.setProgress}  key="business" pageSize={9} country="in" category="Business" />
             </Route>
             <Route exact path="/entertainment">
-              <News key="entertainment" pageSize={9} country="in" category="Entertainment" />
+              <News changeProgress={this.setProgress}  key="entertainment" pageSize={9} country="in" category="Entertainment" />
             </Route>
             <Route exact path="/health">
-              <News key="health" pageSize={9} country="in" category="Health" />
+              <News changeProgress={this.setProgress}  key="health" pageSize={9} country="in" category="Health" />
             </Route>
             <Route exact path="/science">
-              <News key="science" pageSize={9} country="in" category="Science" />
+              <News changeProgress={this.setProgress}  key="science" pageSize={9} country="in" category="Science" />
             </Route>
             <Route exact path="/sports">
-              <News key="sports" pageSize={9} country="in" category="Sports" />
+              <News changeProgress={this.setProgress}  key="sports" pageSize={9} country="in" category="Sports" />
             </Route>
             <Route exact path="/technology">
-              <News key="technology" pageSize={9} country="in" category="Technology" />
+              <News changeProgress={this.setProgress}  key="technology" pageSize={9} country="in" category="Technology" />
             </Route>
           </Switch>
         </Router>
