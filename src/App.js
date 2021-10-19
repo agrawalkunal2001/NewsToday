@@ -32,25 +32,25 @@ export default class App extends Component {
           />
           <Switch /* Before using exact keyword, the links were not working. After using exact keyword, links were working but one had to reload the page after clicking a category, to show its news. This was because after selecting a category, it was not remounted on the previous catgeory. To resolve this, key was used.*/>
             <Route exact path="/" /* / Specifies home page which is general category*/>
-              <News changeProgress={this.setProgress}  key="general" pageSize={9} country="in" category="General" />
+              <News changeProgress={this.setProgress} apiKey={this.apiKey}  key="general" pageSize={9} country="in" category="General" />
             </Route>
             <Route exact path="/business">
-              <News changeProgress={this.setProgress}  key="business" pageSize={9} country="in" category="Business" />
+              <News changeProgress={this.setProgress} apiKey={this.apiKey}  key="business" pageSize={9} country="in" category="Business" />
             </Route>
             <Route exact path="/entertainment">
-              <News changeProgress={this.setProgress}  key="entertainment" pageSize={9} country="in" category="Entertainment" />
+              <News changeProgress={this.setProgress} apiKey={this.apiKey}  key="entertainment" pageSize={9} country="in" category="Entertainment" />
             </Route>
             <Route exact path="/health">
-              <News changeProgress={this.setProgress}  key="health" pageSize={9} country="in" category="Health" />
+              <News changeProgress={this.setProgress} apiKey={this.apiKey}  key="health" pageSize={9} country="in" category="Health" />
             </Route>
             <Route exact path="/science">
-              <News changeProgress={this.setProgress}  key="science" pageSize={9} country="in" category="Science" />
+              <News changeProgress={this.setProgress} apiKey={this.apiKey}  key="science" pageSize={9} country="in" category="Science" />
             </Route>
             <Route exact path="/sports">
-              <News changeProgress={this.setProgress}  key="sports" pageSize={9} country="in" category="Sports" />
+              <News changeProgress={this.setProgress} apiKey={this.apiKey}  key="sports" pageSize={9} country="in" category="Sports" />
             </Route>
             <Route exact path="/technology">
-              <News changeProgress={this.setProgress}  key="technology" pageSize={9} country="in" category="Technology" />
+              <News changeProgress={this.setProgress} apiKey={this.apiKey}  key="technology" pageSize={9} country="in" category="Technology" />
             </Route>
           </Switch>
         </Router>
