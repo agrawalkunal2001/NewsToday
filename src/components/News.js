@@ -9,10 +9,7 @@ const News = (props) => {
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
   const [totalResults, setTotalResults] = useState(0)
-  // document.title = `News Today - ${props.category}`;
-
-
-
+ 
   const updateNews = async () => {
     props.changeProgress(0);
     const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=3e181924374b4955b4018130d947707b&page=${page}&pageSize=${props.pageSize}`;
@@ -28,6 +25,7 @@ const News = (props) => {
   }
 
   useEffect(() => {
+    document.title = `News Today - ${props.category}`;
     updateNews();
   }, []) // This does same thing as componentDidMount()
 
@@ -48,8 +46,8 @@ const News = (props) => {
   }
 
   const fetchMoreData = async () => {
+    const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=3e181924374b4955b4018130d947707b&page=${page+1}&pageSize=${props.pageSize}`;
     setPage(page + 1);
-    const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=3e181924374b4955b4018130d947707b&page=${page}&pageSize=${props.pageSize}`;
     let data = await fetch(url);
     let parsedData = await data.json();
     setArticles(articles.concat(parsedData.articles));
@@ -59,7 +57,7 @@ const News = (props) => {
 
   return (
     <div className="container my-2">
-      <h1 className="text-center" style={{ margin: "30px" }}>Top {props.category} Headlines</h1>
+      <h1 className="text-center" style={{ margin: "30px", marginTop: "80px"}}>Top {props.category} Headlines</h1>
       {loading && <Spinner />/* Spinner is only visible when statement before && is true*/}
       <InfiniteScroll
         dataLength={articles.length}
